@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign up — Finance Manager</title>
+  <link rel="stylesheet" href="/styles/style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <span class="brand-name">Finance Manager</span>
+    </div>
+    <div class="card">
+      <h1>Create your account</h1>
+
+      <% success.forEach(msg => { %><div class="flash flash-success"><%= msg %></div><% }) %>
+      <% error.forEach(msg => { %><div class="flash flash-error"><%= msg %></div><% }) %>
+
+      <a class="btn btn-google" href="/auth/google">Continue with Google</a>
+      <div class="divider">or</div>
+
+      <form method="POST" action="/signup">
+        <label>Name</label>
+        <input type="text" name="name" required />
+        <label>Email</label>
+        <input type="email" name="email" required />
+        <label>Password</label>
+        <input type="password" name="password" minlength="8" required />
+        <button type="submit" class="btn btn-primary">Sign up</button>
+      </form>
+
+      <p class="muted">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+  </div>
+</body>
+</html>

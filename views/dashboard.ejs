@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Finance Manager</title>
+  <link rel="stylesheet" href="/styles/style.css" />
+</head>
+<body>
+  <div class="container wide">
+    <div class="topbar">
+      <div class="topbar-title">
+        <div class="brand-mark">F</div>
+        <div>
+          <h1>Hi, <%= user.name || user.email %></h1>
+          <p class="subtitle">Here's where your money stands.</p>
+        </div>
+      </div>
+      <a class="btn btn-outline" href="/logout">Log out</a>
+    </div>
+
+    <% success.forEach(msg => { %><div class="flash flash-success"><%= msg %></div><% }) %>
+    <% error.forEach(msg => { %><div class="flash flash-error"><%= msg %></div><% }) %>
+
+    <div class="summary">
+      <div class="summary-card income">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></div>
+        <div>
+          <span>Income</span>
+          <strong>₹<%= income.toFixed(2) %></strong>
+        </div>
+      </div>
+      <div class="summary-card expense">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></div>
+        <div>
+          <span>Expense</span>
+          <strong>₹<%= expense.toFixed(2) %></strong>
+        </div>
+      </div>
+      <div class="summary-card balance">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"></rect><path d="M2 10h20"></path><circle cx="17" cy="14.5" r="1.2" fill="currentColor" stroke="none"></circle></svg></div>
+        <div>
+          <span>Balance</span>
+          <strong>₹<%= balance.toFixed(2) %></strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Add transaction</h2>
+      <form method="POST" action="/transactions" class="row-form">
+        <select name="type" required>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+        <input type="text" name="category" placeholder="Category" required />
+        <input type="number" name="amount" placeholder="Amount" step="0.01" min="0" required />
+        <input type="text" name="description" placeholder="Description (optional)" />
+        <input type="date" name="date" />
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Transactions</h2>
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Type</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% transactions.forEach(t => { %>
+            <tr>
+              <td><%= t.date.toDateString() %></td>
+              <td class="<%= t.type %>"><%= t.type %></td>
+              <td><%= t.category %></td>
+              <td><%= t.description || '' %></td>
+              <td>₹<%= t.amount.toFixed(2) %></td>
+              <td>
+                <form method="POST" action="/transactions/<%= t._id %>/delete">
+                  <button type="submit" class="btn btn-link">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+          <% if (transactions.length === 0) { %>
+            <tr><td colspan="6" class="muted">No transactions yet.</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
