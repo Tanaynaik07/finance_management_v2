@@ -43,7 +43,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => res.redirect(req.isAuthenticated() ? "/dashboard" : "/login"));
+app.get("/", (req, res) =>
+  req.isAuthenticated() ? res.redirect("/dashboard") : res.render("landing")
+);
 app.get("/privacy", (req, res) => res.render("privacy"));
 app.get("/terms", (req, res) => res.render("terms"));
 
